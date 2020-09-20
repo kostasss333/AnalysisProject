@@ -1,0 +1,150 @@
+﻿@model Project2.Models.XMLModel
+@{
+    ViewBag.Title = "XmlResults";
+    var i = Model.Inproceedings.Count + Model.Articles.Count + Model.Books.Count;
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h1>Αποτελέσματα</h1>
+    <p> Βρέθηκαν @i αποτελέσματα</p>
+    <button type="button" id="addtoDb" class="btn btn-success">Προσθήκη αποτελεσμάτων στη βάση στη Βάση</button>
+    <br />
+    <h2>Άρθρα</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Τίτλος</th>
+                <th scope="col">Έτος</th>
+                <th scope="col">Συγγραφέας</th>
+                <th scope="col">Τόμος</th>
+                <th scope="col">Σελίδες</th>
+                <th scope="col">URL</th>
+                <th scope="col">Τίτλος Περιοδικού (Journal)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Articles)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@item.title</td>
+                    <td>@item.year</td>
+                    <td>@item.author</td>
+                    <td>@item.volume</td>
+                    <td>@item.pages</td>
+                    <td>@item.url</td>
+                    <td>@item.mag_name</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <h2>Inproceedings</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Τίτλος</th>
+                <th scope="col">Έτος</th>
+                <th scope="col">Εκδότης</th>
+                <th scope="col">Τίτλος Βιβλίου</th>
+                <th scope="col">Σελίδες</th>
+                <th scope="col">URL</th>
+                <th scope="col">Διεύθυνση</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Inproceedings)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@item.title</td>
+                    <td>@item.year</td>
+                    <td>@item.editor</td>
+                    <td>@item.booktitle</td>
+                    <td>@item.pages</td>
+                    <td>@item.url</td>
+                    <td>@item.address</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <h2>Books</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Τίτλος</th>
+                <th scope="col">Έτος</th>
+                <th scope="col">Εκδότης</th>
+                <th scope="col">Τόμος</th>
+                <th scope="col">ISBN</th>
+                <th scope="col">ISSN</th>
+                <th scope="col">Έκδοση</th>
+                <th scope="col">Διεύθυνση</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Books)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@item.title</td>
+                    <td>@item.year</td>
+                    <td>@item.publisher</td>
+                    <td>@item.volume</td>
+                    <td>@item.ISBN</td>
+                    <td>@item.ISSN</td>
+                    <td>@item.edition</td>
+                    <td>@item.address</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <script>
+
+    $("#addtoDb").click(function() {
+
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            data: { 'link': getUrlParameter('link') },
+            url: '@Url.Action("AddtoDb", "Publishment")',
+            success: function() {
+                alert("Η λίστες δημοσιεύσεων και συγγραφέων ενημερώθηκαν με επιτυχία");
+            }
+        });
+    });
+
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+    </script>
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}
+

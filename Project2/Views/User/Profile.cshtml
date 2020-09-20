@@ -1,0 +1,167 @@
+﻿@model Project2.Models.WriterModel
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="/Images/fullLogo.png" alt=""/>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5>
+                        @Model.fname @Model.lname
+                    </h5>
+                    <p>Παρακάτω μπορείτε να δείτε τις πληροφορίες του λογαριασμού σας καθώς και να τις τροποοποιήσετε. Αν είναι η πρώτη σας είσοδο στο σύστημα συνιστάται να συμπηρώσετε την μονάδα που ανήκετε καθώς και τις πληροφορίες συγγραφέα.</p>
+                    <p class="proile-rating">Δημοσιεύσεις που έχετε ανεβάσει : <span>@Model.coutner</span></p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input type="button" class="" id="savebtn" name="savebtn" value="Αποθήκευση Αλλαγών"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label">Όνομα Χρήστη</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="@Model.username" class="form-control-plaintext" id="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mail" class="col-sm-2 col-form-label">E-mail</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="@Model.mail" class="form-control-plaintext" id="mail">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="role" class="col-sm-2 col-form-label">Ρόλος στο σύστημα</label>
+                            <div class="col-sm-10">
+                                @if (Model.UserRole == "dim")
+                                {
+                                    <input readonly="readonly" type="text" value="Δημοσιεύον" class="form-control-plaintext" id="role">
+                                }
+                                else if (Model.UserRole == "yp")
+                                {
+                                    <input readonly="readonly" type="text" value="Υπεύθυνος" class="form-control-plaintext" id="role">
+                                }
+                                else
+                                {
+                                    <input readonly="readonly" type="text" value="Δεν ανήκετε σε κάποια μονάδα για να υπάρχει ρόλος" class="form-control-plaintext" id="role">
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="unit" class="col-sm-2 col-form-label">Μονάδα που ανήκετε</label>
+                            <div class="col-sm-10">
+                                @if (Model.UserRole == "yp")
+                                {
+                                    <input readonly="readonly" type="text" value="@Model.AllUnits.First(sh => sh.ID == Model.unit_that_belongs).name" class="form-control-plaintext" id="role">
+                                }
+                                else
+                                {
+                                    <select id="unit" class="form-control">
+                                        @foreach (var item in Model.AllUnits)
+                                        {
+                                            if (item.ID == Model.unit_that_belongs)
+                                            {
+                                                <option selected>@item.name</option>
+                                            }
+                                            else
+                                            {
+                                                <option>@item.name</option>
+                                            }
+
+                                            if (Model.unit_that_belongs == null)
+                                            {
+                                                <option selected>Δεν έχει επιλεγεί ακόμα μονάδα</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<h3>Στοιχεία συγγραφέα</h3>
+<form>
+    <div class="form-group row">
+        <label for="fname" class="col-sm-2 col-form-label">Όνομα</label>
+        <div class="col-sm-10">
+            <input type="text" value="@Model.fname" class="form-control-plaintext" id="fname">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="lname" class="col-sm-2 col-form-label">Επώνυμο</label>
+        <div class="col-sm-10">
+            <input type="text" value="@Model.lname" class="form-control-plaintext" id="lname">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="orchidURL" class="col-sm-2 col-form-label">OrchidURL</label>
+        <div class="col-sm-10">
+            <input type="text" value="@Model.orchidURL" class="form-control-plaintext" id="orchidURL">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="privateURL" class="col-sm-2 col-form-label">Προσωπικό Url</label>
+        <div class="col-sm-10">
+            <input type="text" value="@Model.privateURL" class="form-control-plaintext" id="privateURL">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="writerRole" @Model.writerRole class="col-sm-2 col-form-label">Ιδιότητα</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control-plaintext" id="writerRole">
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#savebtn").click(function() {
+        var formdata = {
+            fname: $("#fname").val(),
+            lname: $("#lname").val(),
+            username: $("#username").val(),
+            mail: $("#mail").val(),
+            orchidURL: $("#orchidURL").val(),
+            privateURL: $("#privateURL").val(),
+            wirterRole: $("#writerRole").val(),
+            unit_that_belongs: $("#unit").val(),
+            ID: "@Model.ID",
+            role: "@Model.UserRole"
+        };
+        var data = JSON.stringify({ 'model': formdata });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateProfile", "User")',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                if (data.success == true) {
+                    alert("Οι αλλαγές αποθηκέυτηκαν");
+                    location.reload();
+                } else {
+                    alert("Υπήρξε ένα πρόβλημα με την ενημέρωση των πληροφοριών");
+                }
+
+
+            }
+        });
+
+    });
+</script>

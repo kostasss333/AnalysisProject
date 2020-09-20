@@ -1,0 +1,55 @@
+﻿@model List<Project2.Models.UserManager>
+@{
+    ViewBag.Title = "Users";
+}
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Identity.Name.StartsWith("admin"))
+    {
+        <h1>Χρήστες</h1>
+        <p>Παρακάτω φαίνονται οι χρήστες που ειναι εγγεγραμένοι στο σύστημα</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Όνομα</th>
+                <th scope="col">Επώνυμο</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Ρόλος</th>
+                <th scope="col">Μονάδα που ανοίκει</th>
+                <th scope="col">Εγγραφή ως συγγραφέας</th>
+                <th scope="col"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.user.username</th>
+                    <td>@item.user.fname</td>
+                    <td>@item.user.lname</td>
+                    <td>@item.user.email</td>
+                    <td>@item.user.role</td>
+                    <td>@item.user.unit_that_belongs</td>
+                    <td>@item.iswriter</td>
+                    <td>
+                        <a type="button" class="btn btn-success" href="@Url.Action("EditUser", "Administration", new {model = item.user.username})">Επεξεργασία Χρήστη</a>
+                    </td>
+
+
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        <h2>Η σελίδα είνα προσβάσιμη μόνο από τον διαχειριστή της πλατφόρμας</h2>
+    }
+    
+}
+else
+{
+    <h2>Η σελίδα είνα προσβάσιμη μόνο από τον διαχειριστή της πλατφόρμας</h2>
+}

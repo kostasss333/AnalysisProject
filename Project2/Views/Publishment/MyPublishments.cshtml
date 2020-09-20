@@ -1,0 +1,42 @@
+﻿@model System.Threading.Tasks.Task<List<DAL.Entitites.Publishment>>
+@{
+    ViewBag.Title = "MyPublishments";
+    var i = 0;
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Δημοσιεύσεις χρήστη</h2>
+    <p>Σε αυτήν την ενότητα μπορεί ο χρήστης να δεί τις δημοσιέυσεις που έχει ανεβάσει καθώς και να τις τροποποιήσει</p>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Τίτλος</th>
+            <th scope="col">Έτος Κυκλοφορίας</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Result.OrderBy(sh => sh.year))
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@item.title</td>
+                <td>@item.year</td>
+                <td>
+                    <a type="button" class="btn btn-success" href="@Url.Action("Index", "Publishment", new {id = item.ID})">Τροποποίηση</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}
+

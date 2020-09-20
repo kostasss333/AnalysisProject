@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="/Images/LogoChopped.png" id="icon" alt="User Icon"/>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginform">
+            <input type="text" id="login" class="fadeIn second" name="login" placeholder="Συνθηματικό">
+            <input type="password" id="password" class="fadeIn third" name="login" placeholder="Κωδικός Πρόσβασης">
+            <input type="submit" class="fadeIn fourth" value="Σύνδεση">
+        </form>
+
+        <div id="progress" class="progress">
+            <div id="progres" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div>
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" onclick="location.href = '@Url.Action("Register", "User")'">Εγγραφή στην Πλατφόρμα</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        $("#progress").hide();
+    });
+</script>
+
+<script>
+    $("#loginform").submit(function(event) {
+        event.preventDefault();
+        $("#progress").show();
+        var username = $("#login").val();
+        var password = $("#password").val();
+        var formdata = { username: username, password: password };
+        var data = JSON.stringify({ 'model': formdata });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LoginUser", "User")',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                if (data.success == true)
+                    window.location.href = "/Home/Index";
+                else
+                    alert("Ο συνδιασμός Ονόματος/Συνθηματικού δεν είναι σωστός");
+                $("#progress").hide();
+
+            }
+        });
+    });
+</script>

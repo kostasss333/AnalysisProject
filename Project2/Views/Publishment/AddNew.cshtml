@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "AddNew";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <h2>Προσθήκη νέας δημοσίευσης</h2>
+    <p>Η προσθήκη μιας νέας δημοσίευσης μπορεί να γίνει με 2 τρόπους. Είτε χειροκίνητα είτε μέσω Link για ενα αρχείο XML. Η μέθοδος με το XML βολεύει για την εισαγωγή πολλών δημοσιεύσεων σε λίγο χρόνο.</p>
+    <div class="container">
+        <br />
+
+        <br />
+        <br />
+        <div class="row justify-content-center">
+
+            <br>
+            <div class="col-12 col-md-10 col-lg-8">
+                <button class="btn btn-lg btn-success" id="xml" type="submit">Χρήση XML Link</button>
+                <a class="btn btn-lg btn-success" href="@Url.Action("ManualAdd", "Publishment")" type="button">Χειροκίνητη εισαγωγή</a>
+
+            </div>
+            <!--end of col-->
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+    <div id="XMLInput">
+        <br />
+        <div class="row justify-content-center">
+
+            <br>
+            <div class="col-12 col-md-10 col-lg-8">
+                <form id="searchform" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-link h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input required="true" class="form-control form-control-lg form-control-borderless" id="link" type="search" placeholder="XML Link">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success" onclick="changeHref()" type="button">Αναζήτηση δημοσιεύσεων</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#XMLInput").hide();
+        });
+
+        $("#xml").click(function() {
+            $("#XMLInput").show(330);
+        });
+
+        function changeHref() {
+            if ($('#link').val() == null) {
+                alert("Πρέπει να εισάγετε το Link για να συνεχίσετε");
+                return;
+            }
+            var url = '@Url.Action("XMLresults", "Publishment")';
+        var link = $('#link').val();
+        window.location.href = url + '/?link=' + link;
+    }
+    </script>
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}

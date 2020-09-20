@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+
+<div class="container">
+    <h1 class="well">Εγγραφή στην πλατφόρμα</h1>
+    <p>Εγγραφή νέου χρήστη. Μετά την εγγραφή σας στην καρτέλα προφίλ μπορείτε να τροποποιήσετε τον λογαριασμό σας καθώς και να προσθέσετε πληροφορίες συγγραφέα.</p>
+    <div class="col-lg-12 well">
+        <div class="row">
+            <form id="registerform">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input id="mail" type="text" placeholder="E-Mail" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>Όνομα</label>
+                            <input id="fname" type="text" placeholder="Όνομα με βάση το DBLP" class="form-control">
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label>Επώνυμο</label>
+                            <input id="lname" type="text" placeholder="Επώνυμο με βάση το DBLP" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input id="username" type="text" placeholder="Όνομα Χρήστη" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>Κωδικός Πρόσβασης</label>
+                            <input id="password" type="password" placeholder="Κωδικός Πρόσβασης" class="form-control">
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label>Επιβεβαίωση Κωδικού πρόσβασης</label>
+                            <input id="password2" type="password" placeholder="Επανάληψη κωδικού" class="form-control">
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-lg btn-info">Έγγραφή</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#registerform").submit(function(event) {
+        event.preventDefault();
+        var fname = $("#fname").val();
+        var lname = $("#lname").val();
+        var mail = $("#mail").val();
+        var password = $("#password").val();
+        var username = $("#username").val();
+        var password1 = $("#password").val();
+        var password2 = $("#password2").val();
+        if (password1 != password2) {
+            alert("Οι κώδικοι πρόσβασης δεν ταιριάζουν");
+            return;
+        }
+        var formdata = {
+            fname: fname,
+            lname: lname,
+            mail: mail,
+            password: password,
+            username: username
+        };
+        var data = JSON.stringify({ 'model': formdata });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RegisterUser", "User")',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                if (data.message == "OK")
+                    alert("Η εγγραφή ήταν επιτυχής");
+                else {
+                    alert(data.message);
+                }
+
+            }
+        });
+
+    })
+</script>

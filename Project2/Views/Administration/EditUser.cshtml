@@ -1,0 +1,83 @@
+﻿@using System.Diagnostics.Eventing.Reader
+@model Project2.Models.WriterModel
+@{
+    ViewBag.Title = "EditUser";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Identity.Name.StartsWith("admin"))
+    {
+        <h2>Τροποποίηση Πλήροφοριών Χρήστη</h2>
+        <p>Παρακάτω μπορούν να αλλαχθούν οι πληροφορίες που έχει δώσει ο χρήστης. Η διαδικασία αυτή είναι διθέσιμη μόνο για τον διαχειριστή και σκοπεύει στην διόρθωση λαθών που μπορεί να προέκυψαν κατα την εγγραφή στην πλατφόρμα</p>
+        <form id="submitform">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" readonly="readonly" class="form-control" id="username" value="@Model.username">
+            </div>
+            <div class="form-group">
+                <label for="mail">E-mail</label>
+                <input type="text" class="form-control" id="mail" value="@Model.mail">
+            </div>
+            <div class="form-group">
+                <label for="fname">Όνομα</label>
+                <input type="text" class="form-control" id="fname" value="@Model.fname">
+            </div>
+            <div class="form-group">
+                <label for="lname">Επώνυμο</label>
+                <input type="text" class="form-control" id="lname" value="@Model.lname">
+            </div>
+            <div class="form-group">
+                <label for="orchidURL">OrchidUrl</label>
+                <input type="text" class="form-control" id="orchidURL" value="@Model.orchidURL">
+            </div>
+            <div class="form-group">
+                <label for="privateURL">Προσωπικό Url</label>
+                <input type="text" class="form-control" id="privateURL" value="@Model.privateURL">
+            </div>
+            <button type="button" class="btn btn-success" id="savebtn">Ενημέρωση πληροφοριών</button>
+        </form>
+
+        <script>
+    $("#savebtn").click(function() {
+        var formdata = {
+            fname: $("#fname").val(),
+            lname: $("#lname").val(),
+            username: $("#username").val(),
+            mail: $("#mail").val(),
+            orchidURL: $("#orchidURL").val(),
+            privateURL: $("#privateURL").val(),
+            wirterRole: $("#writerRole").val(),
+            ID: "@Model.ID"
+        };
+        var data = JSON.stringify({ 'model': formdata });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateProfile", "User")',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                if (data.success == true) {
+                    alert("Οι αλλαγές αποθηκέυτηκαν");
+                    location.reload();
+                } else {
+                    alert("Υπήρξε ένα πρόβλημα με την ενημέρωση των πληροφοριών");
+                }
+
+
+            }
+        });
+
+    });
+        </script>
+    }
+    else
+    {
+        <h2>Η σελίδα είνα προσβάσιμη μόνο από τον διαχειριστή της πλατφόρμας</h2>
+    }
+    
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}

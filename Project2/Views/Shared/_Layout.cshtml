@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title-Project</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/CSS/login.css">
+    <link rel="stylesheet" type="text/css" href="/CSS/profile.css">
+    <link rel="stylesheet" type="text/css" href="/CSS/Home.css">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg  navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+        <img src="/Images/LogoChopped.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Analysis
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.Identity.Name.StartsWith("admin"))
+            {
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("Units", "Administration")">Μονάδες<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("AddNew", "Administration")">Προσθήκη νέας Μονάδας<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("Users", "Administration")">Διαχείριση Χρηστών<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("Statistics", "Publishment")">Στατιστικά στοιχεία εφαρμογής<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+            }
+            else
+            {
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="@Url.Action("MyPublishments", "Publishment")">Οι δημοσιεύσεις μου<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="@Url.Action("AddNew", "Publishment")">Προσθήκη νέας δημοσίευσης<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="@Url.Action("Statistics", "Publishment")">Στατιστικά στοιχεία εφαρμογής<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            }
+            <a class="btn btn-outline-success my-2 my-sm-0" href="@Url.Action("Profile", "User")" type="button">@User.Identity.Name</a>
+            <a class="btn btn-outline-success my-2 my-sm-2" href="@Url.Action("SignOut", "User")" type="button">Αποσύνδεση</a>
+            <form class="form-inline my-2 my-lg-0">
+                <input id="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button id="button" class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+            </form>
+        }
+        else
+        {
+            <a class="nav-link" href="@Url.Action("Login", "User")">Είσοδος<span class="sr-only">(current)</span></a>
+        }
+    </div>
+
+</nav>
+
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Analysis</p>
+    </footer>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", false)
+
+<script>
+
+    $("#button").click(function () {
+        if ($("#search").val() == "")
+            return;
+            var url = '@Url.Action("SearchResults", "Publishment")';
+        var link = $('#search').val();
+        window.location.href = url + '/?key=' + link;
+    });
+
+</script>
+
+</body>
+
+
+</html>

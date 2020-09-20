@@ -1,0 +1,68 @@
+﻿@model Project2.Models.PairModel
+@{
+    ViewBag.Title = "Units";
+    var i = 0;
+}
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Identity.Name.StartsWith("admin"))
+    {
+        <h1>Διαχείρηση Μονάδων</h1>
+        <p>Παρακάτω φαίνονται οι διαθέσιμες μονάδες που είναι αποθηκευμένες στο σύστημα.Μπορείτε να τροποποιήσετε τις πληροφορίες κάθε μονάδας καθώς και να ορίσετε υπέυθυνο μονάδας</p>
+        <small>*Κάθε χρήστης μπορεί να είναι υπεύθυνος μόνο σε μια μονάδα</small>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Όνομα</th>
+                <th scope="col">Τύπος</th>
+                <th scope="col">Ινστιτούτο</th>
+                <th scope="col">Περιγραφή</th>
+                <th scope="col">Διεύθυνση URL</th>
+                <th scope="col">Τρέχον Υπεύθυνος</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Units)
+            {
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@item.name</td>
+                    <td>@item.type</td>
+                    <td>@item.institute</td>
+                    <td>@item.description</td>
+                    <td>@item.url</td>
+                    <td>
+                        @foreach (var user in Model.Users)
+                        {
+                            if (item.ownded_by == user.ID)
+                            {
+                                @user.username
+                                break;
+                            }
+                            if (item.ownded_by == "free")
+                            {
+                                <text>"Δεν υπάρχει"</text>
+                                break;
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-success" href="@Url.Action("UnitMaster", "Administration", new {model = item.ID})">Επεξεργασία</a>
+                    </td>
+                </tr>
+                i++;
+            }
+
+        </table>
+    }
+    else
+    {
+        <h2>Η σελίδα είνα προσβάσιμη μόνο από τον διαχειριστή της πλατφόρμας</h2>
+    }
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}

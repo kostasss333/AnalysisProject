@@ -1,0 +1,293 @@
+﻿@{
+    ViewBag.Title = "ManualAdd";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Χειροκινητη εισαγωγη</h2>
+    <p>Σε αυτήν την ενότητα μπορείτε να προσθέσετε χειροκίνητα δημοσιεύσεις,όλων των τύπων</p>
+
+    <label for="choises">Επιλέξτε τύπο δημοσίευσης:</label>
+
+    <select id="choises" class="form-control">
+        <option>Article</option>
+        <option>Book</option>
+        <option>Inbook</option>
+        <option>Inrpoceeding</option>
+    </select>
+    <br />
+    <button type="button" id="selected" class="btn btn-success">Επιλογή</button>
+
+
+    <div id="inproceeding">
+        <h2>Νέα Inproceeding</h2>
+        <form>
+            <input required class="form-control" placeholder="Τίτλος" id="intitle" />
+            <input required class="form-control" placeholder="Διεύθνση url" id="inurl" />
+            <input required class="form-control" placeholder="Έτος κυκλοφορίας" id="inyear" />
+            <input required class="form-control" placeholder="Τίτλος Βιβλίου" id="inbooktitle" />
+            <input required  class="form-control" placeholder="Εκδότης" id="ineditor" />
+            <input required class="form-control" placeholder="Αριθμός Σελίδων" id="inpages" />
+            <input required class="form-control" placeholder="Διεύθνση ee" id="inaddress" />
+            <button  type="button" id="inaddbtn" class="btn btn-success">Αξιολόγηση και προσθήκη</button>
+
+        </form>
+        <br />
+    </div>
+
+    <div id="article">
+        <h2>Νέο Άρθρο</h2>
+        <form>
+            <input class="form-control" placeholder="Τίτλος" id="atitle" />
+            <input class="form-control" placeholder="Διεύθνση url" id="aurl" />
+            <input class="form-control" placeholder="Έτος κυκλοφορίας" id="ayear" />
+            <input class="form-control" placeholder="Όνομα Περιοδικού" id="amag_name" />
+            <input class="form-control" placeholder="Συγγραφέας" id="aeditor" />
+            <input class="form-control" placeholder="Τόμος" id="avolume" />
+            <input class="form-control" placeholder="Αρ Σελίδων" id="apages" />
+            <button type="button" id="aaddbtn" class="btn btn-success">Αξιολόγηση και προσθήκη</button>
+
+        </form>
+        <br />
+
+    </div>
+
+    <div id="book">
+        <h2>Νέο Βιβλίο</h2>
+        <form>
+            <input class="form-control" placeholder="Τίτλος" id="btitle" />
+            <input class="form-control" placeholder="Εκδότης" id="beditor" />
+            <input class="form-control" placeholder="Τόμος" id="bvolume" />
+            <input class="form-control" placeholder="Έτος κυκλοφορίας" id="byear" />
+            <input class="form-control" placeholder="έκδοση" id="bedition" />
+            <input class="form-control" placeholder="Αριθμός Σελίδων" id="bpages" />
+            <input class="form-control" placeholder="Διεύθνση ee" id="baddress" />
+            <input class="form-control" placeholder="ISBN" id="bISBN" />
+            <input class="form-control" placeholder="ISSN" id="bISSN" />
+            <input class="form-control" placeholder="Έκδοση" id="bedition" />
+            <button type="button" id="baddbtn" class="btn btn-success">Αξιολόγηση και προσθήκη</button>
+        </form>
+        <br />
+    </div>
+
+    <div id="inbook">
+        <h2>Νέο Inbook</h2>
+        <form>
+            <input class="form-control" placeholder="Τίτλος" id="inbtitle" />
+            <input class="form-control" placeholder="Εκδότης" id="inbeditor" />
+            <input class="form-control" placeholder="Τόμος" id="inbvolume" />
+            <input class="form-control" placeholder="Έτος κυκλοφορίας" id="inbyear" />
+            <input class="form-control" placeholder="έκδοση" id="inbedition" />
+            <input class="form-control" placeholder="Κεφάλαιο" id="inbchapter" />
+            <input class="form-control" placeholder="ISBN" id="inbISBN" />
+            <input class="form-control" placeholder="ISSN" id="inbISSN" />
+            <input class="form-control" placeholder="Σελίδες" id="inpages" />
+            <button type="button" id="inbaddbtn" class="btn btn-success">Αξιολόγηση και προσθήκη</button>
+
+        </form>
+        <br />
+    </div>
+    <script>
+    $(document).ready(function() {
+        $("#inproceeding").hide();
+        $("#book").hide();
+        $("#inbook").hide();
+        $("#article").hide();
+        $("#addbtn").hide();
+    });
+
+    $("#selected").click(function() {
+        switch ($("#choises").val()) {
+        case "Article":
+            $("#inproceeding").hide();
+            $("#book").hide();
+            $("#inbook").hide();
+            $("#article").show(300);
+            break;
+        case "Inrpoceeding":
+            $("#book").hide();
+            $("#inbook").hide();
+            $("#article").hide();
+            $("#inproceeding").show(300);
+            break;
+        case "Book":
+            $("#inproceeding").hide();
+            $("#inbook").hide();
+            $("#article").hide();
+            $("#book").show(300);
+            break;
+        case "Inbook":
+            $("#inproceeding").hide();
+            $("#book").hide();
+            $("#article").hide();
+            $("#inbook").show(300);
+            break;
+        default:
+        }
+        $("#addbtn").show(300);
+    });
+
+
+    $("#inaddbtn").click(function() {
+        var author = $("#ineditor").val();
+        var pages = $("#inpages").val();
+        var address = $("#inaddress").val();
+        var year = $("#inyear").val();
+        var booktitle = $("#inbooktitle").val();
+        var type = $("#choises").val();
+        var title = $("#intitle").val();
+        var url = $("#inurl").val();
+        var _toserialize = {
+            author: author,
+            pages: pages,
+            address: address,
+            year: year,
+            type: type,
+            title: title,
+            booktitle: booktitle,
+            url: url
+
+        };
+        var data = JSON.stringify({ 'model': _toserialize });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("NewPublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+
+    });
+
+
+    $("#inbaddbtn").click(function() {
+        var author = $("#inbeditor").val();
+        var volume = $("#inbvolume").val();
+        var year = $("#inbyear").val();
+        var ISBN = $("#inbISBN").val();
+        var ISSN = $("#inbISSN").val();
+        var chapter = $("#inbchapter").val();
+        var booktitle = $("#inbooktitle").val();
+        var type = $("#choises").val();
+        var title = $("#inbtitle").val();
+        var edition = $("#inbedition").val();
+        var pages = $("#inbpages").val();
+        var _toserialize = {
+            author: author,
+            volume: volume,
+            year: year,
+            ISBN: ISBN,
+            ISSN: ISSN,
+            type: type,
+            title: title,
+            booktitle: booktitle,
+            chapter: chapter,
+            edition: edition,
+            pages: pages
+
+        };
+        var data = JSON.stringify({ 'model': _toserialize });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("NewPublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+
+    });
+
+
+    $("#aaddbtn").click(function() {
+        var author = $("#aeditor").val();
+        var volume = $("#avolume").val();
+        var pages = $("#apages").val();
+        var year = $("#ayear").val();
+        var magname = $("#amag_name").val();
+        var type = $("#choises").val();
+        var title = $("#atitle").val();
+        var url = $("#aurl").val();
+        var _toserialize = {
+            author: author,
+            volume: volume,
+            pages: pages,
+            mag_name: magname,
+            year: year,
+            type: type,
+            title: title,
+            url: url
+
+        };
+        var data = JSON.stringify({ 'model': _toserialize });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("NewPublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+
+    });
+
+
+    $("#baddbtn").click(function() {
+        var author = $("#beditor").val();
+        var volume = $("#bvolume").val();
+        var pages = $("#bpages").val();
+        var address = $("#baddress").val();
+        var year = $("#byear").val();
+        var ISBN = $("#bISBN").val();
+        var ISSN = $("#bISSN").val();
+        var type = $("#choises").val();
+        var title = $("#btitle").val();
+        var edition = $("#bedition").val();
+        var _toserialize = {
+            author: author,
+            volume: volume,
+            pages: pages,
+            address: address,
+            year: year,
+            ISBN: ISBN,
+            ISSN: ISSN,
+            type: type,
+            title: title,
+            edition: edition
+
+        };
+        var data = JSON.stringify({ 'model': _toserialize });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("NewPublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+
+    });
+    </script>
+}
+else
+{
+    <h2>Δεν είστε συνδεμένος στην πλατφόρμα</h2>
+}
+

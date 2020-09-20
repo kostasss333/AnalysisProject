@@ -1,0 +1,336 @@
+﻿@model Project2.Models.PublishmentModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+   @if (Model.type == "deleted")
+    {
+        <h2>Η δημοσίευση δεν υπάρχει πλέον</h2>
+        return;
+    }
+
+    <h2>@Model.title</h2>
+    <h3>@Model.type</h3>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="card-title mb-4">
+                        <div class="d-flex justify-content-start">
+                            <div class="userData ml-3">
+                                @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                {
+                                    <p class="d-block">Η δημοσίευση σας ανήκει επομένως μπορείτε να την τροποποιήσετε</p>
+                                    <button id="update_button" class="  btn  btn-primary d-block">Ενημέρωση</button>
+                                    <br />
+                                    <button id="delete_button" class="  btn  btn-danger d-block">Διαγραφή</button>
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="tab-content ml-1" id="myTabContent">
+                                <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Uploader:</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            <input readonly="" class="form-control" type="text" value="@Model.publisher_name" />
+                                        </div>
+                                    </div>
+                                    <hr />
+
+                                    <hr />
+
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Εκδόθηκε από</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                <input id="author_val" class="form-control" type="text" value="@Model.author" />
+                                            }
+                                            else
+                                            {
+                                                @Model.author
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+
+
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Τόμος</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "inproceeding")
+                                                {
+                                                    <inpu readonly id="volume_val" class="form-control" type="text" value="@Model.volume" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="volume_val" class="form-control" type="text" value="@Model.volume" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.volume
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Σελίδες</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "book")
+                                                {
+                                                    <input readonly id="pages_val" class="form-control" type="text" value="@Model.pages" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="pages_val" class="form-control" type="text" value="@Model.pages" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.pages
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Διαθέσιμα url</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "book" || Model.type == "inbook" || Model.type == "article")
+                                                {
+                                                    <input readonly id="adresses_val" class="form-control" type="text" value="@Model.address" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="adresses_val" class="form-control" type="text" value="@Model.address" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.address
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Έτος</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                <input id="year_val" class="form-control" type="text" value="@Model.year" />
+                                            }
+                                            else
+                                            {
+                                                @Model.year
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">ISBN</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "article" || Model.type == "inproceeding")
+                                                {
+                                                    <input readonly id="id_val" class="form-control" type="text" value="@Model.ISBN" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="isbn_val" class="form-control" type="text" value="@Model.ISBN" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.ISBN
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">ISSN</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "article" || Model.type == "inproceeding")
+                                                {
+                                                    <input readonly id="issn_val" class="form-control" type="text" value="@Model.ISSN" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="issn_val" class="form-control" type="text" value="@Model.ISSN" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.ISSN
+                                            }
+
+                                        </div>
+
+
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Τίτλος Βιβλίου</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                if (Model.type == "book")
+                                                {
+                                                    <input readonly id="booktitle" class="form-control" type="text" value="@Model.booktitle" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="booktitle" class="form-control" type="text" value="@Model.booktitle" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Model.booktitle
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold;">Τίτλος Περιοδικού</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">
+                                            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.publisher_name)
+                                            {
+                                                <input id="magname" class="form-control" type="text" value="@Model.mag_name" />
+                                            }
+                                            else
+                                            {
+                                                @Model.mag_name
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $("#update_button").click(function() {
+        var author = $("#author_val").val();
+        var volume = $("#volume_val").val();
+        var pages = $("#pages_val").val();
+        var address = $("#adresses_val").val();
+        var year = $("#year_val").val();
+        var ISBN = $("#isbn_val").val();
+        var ISSN = $("#issn_val").val();
+        var chapter = $("#chapter_val").val();
+        var booktitle = $("#booktitle").val();
+        var magname = $("#magname").val();
+        var type = '@Model.type';
+        var title = '@Model.title';
+        var id = '@Model.ID';
+        var _toserialize = {
+            author: author,
+            volume: volume,
+            pages: pages,
+            address: address,
+            mag_name: magname,
+            year: year,
+            ISBN: ISBN,
+            ISSN: ISSN,
+            type: type,
+            title: title,
+            ID: id,
+            booktitle: booktitle
+        };
+        var data = JSON.stringify({ 'model': _toserialize });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("UpdatePublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+
+    });
+    </script>
+
+    <script>
+    $("#delete_button").click(function() {
+        var _items = {
+            ID: '@Model.ID',
+            type: '@Model.type'
+        };
+        var data = JSON.stringify({ 'model': _items });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '@Url.Action("DeletePublishment", "Publishment")',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                alert("Η ενέργεια ολοκληρώθηκε με επιτυχία");
+            }
+
+        });
+
+    });
+    </script>
+
+
